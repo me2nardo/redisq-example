@@ -4,6 +4,7 @@ import ca.radiant3.redisq.RedisMessageQueue;
 import ca.radiant3.redisq.persistence.RedisOps;
 import ca.radiant3.redisq.producer.MessageProducer;
 import ca.radiant3.redisq.producer.MessageProducerImpl;
+import ca.radiant3.redisq.queuing.RandomQueueDequeueStrategy;
 import ca.radiant3.redisq.serialization.Jackson2PayloadSerializer;
 import ca.radiant3.redisq.serialization.PayloadSerializer;
 import org.springframework.context.annotation.Bean;
@@ -24,8 +25,9 @@ public class RedisConfig {
     @Bean
     public RedisConnectionFactory connectionFactory() {
         JedisConnectionFactory factory = new JedisConnectionFactory();
-        factory.setHostName("localhost");
+        factory.setHostName("10.49.197.234");
         factory.setPort(6379);
+        factory.setPassword("qwe");
         factory.setUsePool(true);
         return factory;
     }
@@ -55,6 +57,7 @@ public class RedisConfig {
     public RedisMessageQueue myQueue(){
         RedisMessageQueue redisMessageQueue = new RedisMessageQueue();
         redisMessageQueue.setQueueName("Sending");
+        redisMessageQueue.setQueueDequeueStrategy(new RandomQueueDequeueStrategy(redisOps()));
         redisMessageQueue.setRedisOps(redisOps());
 
 
